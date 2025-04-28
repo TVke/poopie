@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@font-face {
+	font-family: Futura;
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url("/src/font/Futura-Medium.woff2") format("woff2"),
+	url("/src/font/Futura-Medium.woff") format("woff");
+}
+
+@theme {
+	--font-futura: "Futura", sans-serif;
+}
