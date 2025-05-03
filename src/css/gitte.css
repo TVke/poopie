@@ -184,5 +184,5 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("/src/font/Futura-Medium.woff2") format("woff2"),	url("/src/font/Futura-Medium.woff") format("woff");
+  src: url("/poopie/src/font/Futura-Medium.woff2") format("woff2"),	url("/poopie/src/font/Futura-Medium.woff") format("woff");
 }
