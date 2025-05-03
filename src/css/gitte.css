@@ -168,8 +168,8 @@
     white-space: nowrap;
     border-width: 0;
   }
-  .bg-\[url\(\/src\/img\/babyblanket\.jpg\)\] {
-    background-image: url(/src/img/babyblanket.jpg);
+  .bg-\[url\(\/poopie\/src\/img\/babyblanket\.jpg\)\] {
+    background-image: url(/poopie/src/img/babyblanket.jpg);
   }
   .font-futura {
     font-family: var(--font-futura);
