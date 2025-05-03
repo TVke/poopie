@@ -1,6 +1,11 @@
 {
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./css/gitte.css -o ./src/css/gitte.css --watch",
+    "prod": "npx @tailwindcss/cli -i ./css/gitte.css -o ./src/css/gitte.css --minify && terser ./js/gitte.js -o ./src/js/gitte.min.js -c -m"
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.4",
-    "tailwindcss": "^4.1.4"
+    "tailwindcss": "^4.1.4",
+    "terser": "^5.39.0"
   }
 }

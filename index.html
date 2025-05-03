@@ -7,8 +7,19 @@
     <link href="/poopie/src/css/gitte.css" rel="stylesheet">
 </head>
 <body class="font-futura antialiased bg-[url(/poopie/src/img/babyblanket.jpg)]">
-<h1 class="sr-only">PooPie</h1>
-<img src="/poopie/src/img/PooPie.png" alt="PooPie">
-
+    <div class="mx-4">
+        <header>
+            <h1 class="sr-only">PooPie</h1>
+            <img class="block mx-auto max-h-24 mt-12 mb-24" src="/poopie/src/img/PooPie.png" alt="PooPie">
+        </header>
+        <main>
+        <div class="sm:flex justify-center space-y-4 sm:space-y-0 sm:space-x-8 mx-auto text-center">
+            <a data-level="easy" class="block bg-green-200 text-green-950 py-3 px-4 text-3xl hover:bg-green-300" href="#">Makkelijk</a>
+            <a data-level="medium" class="block bg-orange-200 text-yellow-950 py-3 px-4 text-3xl hover:bg-orange-300" href="#">Gemiddeld</a>
+            <a data-level="expert" class="block bg-red-200 text-red-950 py-3 px-4 text-3xl hover:bg-red-300" href="#">Moeilijk</a>
+        </div>
+        </main>
+    </div>
+    <script src="/poopie/js/gitte.js"></script>
 </body>
 </html>
