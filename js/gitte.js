@@ -135,49 +135,49 @@
                 // top left field
                 testX = x - 1;
                 testY = y - 1;
-                if (testX >= 0 && testY >= 0) {
+                if (testX >= 0 && testY >= 0 && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // top center field
                 testX = x - 1;
                 testY = y;
-                if (testX >= 0) {
+                if (testX >= 0 && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // top right field
                 testX = x - 1;
                 testY = y + 1;
-                if (testX >= 0 && testY < model.field.length) {
+                if (testX >= 0 && testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // center left field
                 testX = x;
                 testY = y - 1;
-                if (testY >= 0) {
+                if (testY >= 0 && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // center right field
                 testX = x;
                 testY = y + 1;
-                if (testY < model.field.length) {
+                if (testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom left field
                 testX = x + 1;
                 testY = y - 1;
-                if (testX < model.field[0].length && testY >= 0) {
+                if (testX < model.field[0].length && testY >= 0 && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom center field
                 testX = x - 1;
                 testY = y;
-                if (testX >= 0) {
+                if (testX >= 0 && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom right field
                 testX = x + 1;
                 testY = y + 1;
-                if (testX < model.field[0].length && testY < model.field.length) {
+                if (testX < model.field[0].length && testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
             }
@@ -190,7 +190,6 @@
             const columnSize = fields.length;
             const rowSize = fields[0].length;
 
-            // loop over every field
             for (let y = 0; y < columnSize; y++) {
                 for (let x = 0; x < rowSize; x++) {
                     if (fields[y][x].publish() === 'mine') {
