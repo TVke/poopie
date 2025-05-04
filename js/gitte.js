@@ -104,6 +104,7 @@
                     field.className = "relative w-full h-full";
                     field.dataset.x = "" + x;
                     field.dataset.y = "" + y;
+                    numberValue.className = "absolute inset-0 flex justify-center items-center text-[min(3.5vw,_37px)]";
 
                     field.appendChild(baseImage);
                     field.appendChild(numberValue);
@@ -186,15 +187,25 @@
 
         },
         viewFields: function (fields) {
+            const columnSize = fields.length;
+            const rowSize = fields[0].length;
+
             // loop over every field
-            // show mines
-            // add number to text field
+            for (let y = 0; y < columnSize; y++) {
+                for (let x = 0; x < rowSize; x++) {
+                    if (fields[y][x].publish() === 'mine') {
+                        document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] .mine').classList.remove("hidden");
+                    }
+                    if (fields[y][x].publish() > 0) {
+                        document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] p').innerHTML = fields[y][x].publish();
+                    }
+                }
+            }
         },
         init: function () {
             // field setup
             model.selectedLevel.subscribe(function (selectedLevel) {
                 view.levelSelection.classList.add('hidden', 'sm:hidden');
-                model.field = [];
                 setup.modelField(selectedLevel);
                 setup.viewField();
                 setup.modelMines(selectedLevel);
