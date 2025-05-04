@@ -82,7 +82,7 @@
                 for (let x = 0; x < rowSize; x++) {
                     model.field[y][x] = new Observable();
                     model.field[y][x].publish(0);
-                    model.mineLocationOptions.push({x: x, y: y});
+                    model.mineLocationOptions.push({y: y, x: x});
                 }
             }
         },
@@ -104,7 +104,7 @@
                     field.className = "relative w-full h-full";
                     field.dataset.x = "" + x;
                     field.dataset.y = "" + y;
-                    numberValue.className = "absolute inset-0 flex justify-center items-center text-[min(3.5vw,_37px)]";
+                    numberValue.className = "absolute inset-0 pointer-events-none flex justify-center items-center text-[min(3.5vw,_37px)]";
 
                     field.appendChild(baseImage);
                     field.appendChild(numberValue);
@@ -124,67 +124,71 @@
                 model.mines.push(...mineLocation);
             }
 
-            for (let j = 0,jlen = model.mines.length; j < jlen; j++) {
+            for (let j = 0, jlen = model.mines.length; j < jlen; j++) {
                 const mine = model.mines[j];
                 model.field[mine.y][mine.x].publish('mine');
             }
         },
         modelFieldValues: function (mines) {
             for (let j = 0, jlen = mines.length; j < jlen; j++) {
-                let x = mines[j].x,y = mines[j].y, testX, testY;
+                let x = mines[j].x, y = mines[j].y, testX, testY;
                 // top left field
-                testX = x - 1;
                 testY = y - 1;
-                if (testX >= 0 && testY >= 0 && model.field[testY][testX].publish() !== "mine") {
+                testX = x - 1;
+                if (testY >= 0 && testX >= 0 &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // top center field
-                testX = x - 1;
-                testY = y;
-                if (testX >= 0 && model.field[testY][testX].publish() !== "mine") {
+                testY = y - 1;
+                testX = x;
+                if (testY >= 0 &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // top right field
-                testX = x - 1;
-                testY = y + 1;
-                if (testX >= 0 && testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
+                testY = y - 1;
+                testX = x + 1;
+                if (testY >= 0 && testX < model.field[0].length &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // center left field
-                testX = x;
-                testY = y - 1;
-                if (testY >= 0 && model.field[testY][testX].publish() !== "mine") {
+                testY = y;
+                testX = x - 1;
+                if (testX >= 0 &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // center right field
-                testX = x;
-                testY = y + 1;
-                if (testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
+                testY = y;
+                testX = x + 1;
+                if (testX < model.field[0].length &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom left field
-                testX = x + 1;
-                testY = y - 1;
-                if (testX < model.field[0].length && testY >= 0 && model.field[testY][testX].publish() !== "mine") {
+                testY = y + 1;
+                testX = x - 1;
+                if (testY < model.field.length && testX >= 0 &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom center field
-                testX = x - 1;
-                testY = y;
-                if (testX >= 0 && model.field[testY][testX].publish() !== "mine") {
+                testY = y + 1;
+                testX = x;
+                if (testY < model.field.length &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
                 // bottom right field
-                testX = x + 1;
                 testY = y + 1;
-                if (testX < model.field[0].length && testY < model.field.length && model.field[testY][testX].publish() !== "mine") {
+                testX = x + 1;
+                if (testY < model.field.length && testX < model.field[0].length &&
+                    model.field[testY][testX].publish() !== "mine") {
                     model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
                 }
             }
-            // loop over mines
-            // check if out of bounds
-            // add 1 to every field near
-
         },
         viewFields: function (fields) {
             const columnSize = fields.length;
@@ -205,6 +209,8 @@
             // field setup
             model.selectedLevel.subscribe(function (selectedLevel) {
                 view.levelSelection.classList.add('hidden', 'sm:hidden');
+                view.playingField.classList.remove('hidden');
+                view.playingField.classList.add('grid');
                 setup.modelField(selectedLevel);
                 setup.viewField();
                 setup.modelMines(selectedLevel);
