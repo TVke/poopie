@@ -1,4 +1,4 @@
-!function() {
+!function () {
     const Observable = function () {
         const _self = this;
         _self.data;
@@ -41,10 +41,11 @@
 
     const view = {
         playingField: document.getElementById('field'),
-        fieldBaseImage: document.getElementById('diaper-base'),
-        fieldCoverImage: document.getElementById('diaper-cover'),
-        mineImage: document.getElementById('mine'),
-        flagImage: document.getElementById('flag'),
+        fieldBaseImage: document.getElementsByClassName('diaper-base')[0],
+        fieldCoverImage: document.getElementsByClassName('diaper-cover')[0],
+        mineImage: document.getElementsByClassName('mine')[0],
+        flagImage: document.getElementsByClassName('flag')[0],
+        levelSelection: document.getElementById('level-selection'),
         levelSelectButtons: document.querySelectorAll('[data-level]'),
     };
     const model = {
@@ -52,32 +53,163 @@
         fieldSizeOptions: {easy: {x: 8, y: 8}, medium: {x: 10, y: 10}, expert: {x: 16, y: 16}},
         mineAmountOptions: {easy: 10, medium: 20, expert: 40},
         field: [],
+        mines: [],
+        mineLocationOptions: [],
     };
 
     const controller = {
-        fieldSetup: function (selectedLevel) {
-            model.field = new Array(model.fieldSizeOptions[selectedLevel].y);
-            // y
-            for (let y = 0; y < model.fieldSizeOptions[selectedLevel].y; y++) {
-                model.field[y] = new Array(model.fieldSizeOptions[selectedLevel].x);
-                // x
-                for (let x = 0; x < model.fieldSizeOptions[selectedLevel].x; x++) {
+        addFlag: function () {
+
+        },
+        openDiaper: function () {
+
+        },
+        gameWon: function () {
+
+        },
+        gameLost: function () {
+
+        },
+    };
+    const setup = {
+        modelField: function (selectedLevel) {
+            const columnSize = model.fieldSizeOptions[selectedLevel].y;
+            const rowSize = model.fieldSizeOptions[selectedLevel].x;
+
+            model.field = new Array(columnSize);
+            for (let y = 0; y < columnSize; y++) {
+                model.field[y] = new Array(rowSize);
+                for (let x = 0; x < rowSize; x++) {
                     model.field[y][x] = new Observable();
+                    model.field[y][x].publish(0);
+                    model.mineLocationOptions.push({x: x, y: y});
                 }
             }
         },
+        viewField: function () {
+            const columnSize = model.field.length;
+            const rowSize = model.field[0].length;
+
+            view.playingField.style.gridTemplateColumns = "repeat(" + columnSize + ", minmax(0, 1fr))";
+            view.playingField.style.gridTemplateRows = "repeat(" + rowSize + ", minmax(0, 1fr))";
+
+            for (let y = 0; y < columnSize; y++) {
+                for (let x = 0; x < rowSize; x++) {
+                    const field = document.createElement('div');
+                    const baseImage = view.fieldBaseImage.cloneNode();
+                    const numberValue = document.createElement('p');
+                    const mine = view.mineImage.cloneNode();
+                    const coverImage = view.fieldCoverImage.cloneNode();
+
+                    field.className = "relative w-full h-full";
+                    field.dataset.x = "" + x;
+                    field.dataset.y = "" + y;
+
+                    field.appendChild(baseImage);
+                    field.appendChild(numberValue);
+                    field.appendChild(mine);
+                    field.appendChild(coverImage);
+                    view.playingField.appendChild(field);
+                }
+            }
+        },
+        modelMines: function (selectedLevel) {
+            const mineAmount = model.mineAmountOptions[selectedLevel];
+            const arraySize = model.fieldSizeOptions[selectedLevel].y * model.fieldSizeOptions[selectedLevel].x;
+
+            for (let i = 0; i < mineAmount; i++) {
+                const randomLocation = Math.floor(Math.random() * arraySize);
+                const mineLocation = model.mineLocationOptions.splice(randomLocation, 1);
+                model.mines.push(...mineLocation);
+            }
+
+            for (let j = 0,jlen = model.mines.length; j < jlen; j++) {
+                const mine = model.mines[j];
+                model.field[mine.y][mine.x].publish('mine');
+            }
+        },
+        modelFieldValues: function (mines) {
+            for (let j = 0, jlen = mines.length; j < jlen; j++) {
+                let x = mines[j].x,y = mines[j].y, testX, testY;
+                // top left field
+                testX = x - 1;
+                testY = y - 1;
+                if (testX >= 0 && testY >= 0) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // top center field
+                testX = x - 1;
+                testY = y;
+                if (testX >= 0) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // top right field
+                testX = x - 1;
+                testY = y + 1;
+                if (testX >= 0 && testY < model.field.length) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // center left field
+                testX = x;
+                testY = y - 1;
+                if (testY >= 0) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // center right field
+                testX = x;
+                testY = y + 1;
+                if (testY < model.field.length) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // bottom left field
+                testX = x + 1;
+                testY = y - 1;
+                if (testX < model.field[0].length && testY >= 0) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // bottom center field
+                testX = x - 1;
+                testY = y;
+                if (testX >= 0) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+                // bottom right field
+                testX = x + 1;
+                testY = y + 1;
+                if (testX < model.field[0].length && testY < model.field.length) {
+                    model.field[testY][testX].publish(model.field[testY][testX].publish() + 1);
+                }
+            }
+            // loop over mines
+            // check if out of bounds
+            // add 1 to every field near
+
+        },
+        viewFields: function (fields) {
+            // loop over every field
+            // show mines
+            // add number to text field
+        },
         init: function () {
             // field setup
-            model.selectedLevel.subscribe(function (selectedLevel) {model.field = [];controller.fieldSetup(selectedLevel)});
+            model.selectedLevel.subscribe(function (selectedLevel) {
+                view.levelSelection.classList.add('hidden', 'sm:hidden');
+                model.field = [];
+                setup.modelField(selectedLevel);
+                setup.viewField();
+                setup.modelMines(selectedLevel);
+                setup.modelFieldValues(model.mines);
+                setup.viewFields(model.field);
+            });
 
             // level selection
             [...view.levelSelectButtons].forEach(button => {
-                button.addEventListener('click',function () {
+                button.addEventListener('click', function () {
                     model.selectedLevel.publish(button.dataset.level);
                 });
             })
         }
     }
 
-    controller.init();
+    setup.init();
 }()
