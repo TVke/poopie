@@ -205,6 +205,16 @@
                 }
             }
         },
+        listeners: function () {
+            // cover click
+            // uncover and check field
+
+            // check where to setup subscription of the field to check lost/won
+
+            //cover rightclick
+            // add a flag
+            // when clicking on a flag it removes the flag (not the cover)
+        },
         init: function () {
             // field setup
             model.selectedLevel.subscribe(function (selectedLevel) {
@@ -216,6 +226,7 @@
                 setup.modelMines(selectedLevel);
                 setup.modelFieldValues(model.mines);
                 setup.viewFields(model.field);
+                setup.listeners();
             });
 
             // level selection
