@@ -7,7 +7,7 @@
     <link href="/poopie/src/css/gitte.css" rel="stylesheet">
 </head>
 <body class="font-futura antialiased bg-[url(/poopie/src/img/babyblanket.jpg)]">
-<div class="mx-4">
+<div class="mx-4 backdrop-blur-lg">
     <header>
         <h1 class="sr-only">PooPie</h1>
         <a href="."><img class="block mx-auto max-h-24 mt-12 mb-24" src="/poopie/src/img/PooPie.png" alt="PooPie"></a>
@@ -22,6 +22,23 @@
             <a data-level="expert" class="block bg-red-200 text-red-950 py-3 px-4 text-3xl hover:bg-red-300" href="#">Moeilijk</a>
         </div>
         <div id="field" class="hidden select-none gap-1 m-4 aspect-square max-w-5xl mx-auto text-center"></div>
+        <dialog id="won" class="absolute inset-0 z-40 w-full max-w-2xl mx-auto mt-32 mb-12 p-4 rounded-xl shadow-2xl bg-[url(/poopie/src/img/babyblanket.jpg)]">
+            <form method="dialog">
+                <label for="name" class="block text-3xl text-center">Bewaar je tijd, ververser!</label>
+                <input type="text" name="name" id="name" class="block w-full bg-white mt-6 max-w-xl mx-auto px-3 py-2 rounded border border-gray-300 focus:outline-none focus:border-gray-500">
+                <div class="flex flex-wrap justify-around pt-8 pb-3">
+                    <button class="bg-green-200 text-green-900 px-6 py-2 mb-2 text-2xl hover:bg-green-300">Bewaar</button>
+                    <button class="bg-red-200 text-red-900 px-6 py-2 mb-2 text-2xl hover:bg-red-300">Nieuw spel</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog id="lost" class="absolute inset-0 z-40 w-full max-w-2xl mx-auto mt-32 mb-12 p-4 rounded-xl shadow-2xl bg-[url(/poopie/src/img/babyblanket.jpg)]">
+            <p class="text-3xl text-center">Nog eens proberen?</p>
+            <form method="dialog" class="flex flex-wrap justify-around pt-8 pb-3">
+                <button class="bg-green-200 text-green-900 px-6 py-2 mb-2 text-2xl hover:bg-green-300">Nieuw spel</button>
+                <button class="bg-red-200 text-red-900 px-6 py-2 mb-2 text-2xl hover:bg-red-300">Sluit</button>
+            </form>
+        </dialog>
     </main>
     <div class="hidden">
         <img class="block relative diaper-base pointer-events-none" src="/poopie/src/img/pamper_basis.png"
@@ -32,7 +49,7 @@
         <img class="absolute inset-0 z-30 flag" src="/poopie/src/img/neus.png" alt="flag">
     </div>
 </div>
-<!--<script src="/poopie/src/js/gitte.min.js"></script>-->
-<script src="/poopie/js/gitte.js"></script>
+<script src="/poopie/src/js/gitte.min.js"></script>
+<!--<script src="/poopie/js/gitte.js"></script>-->
 </body>
 </html>

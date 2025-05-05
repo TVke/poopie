@@ -47,6 +47,8 @@
         flagImage: document.getElementsByClassName('flag')[0],
         levelSelection: document.getElementById('level-selection'),
         levelSelectButtons: document.querySelectorAll('[data-level]'),
+        wonDialog: document.getElementById('won'),
+        lostDialog: document.getElementById('lost'),
     };
     const model = {
         selectedLevel: new Observable(),
@@ -76,7 +78,7 @@
         openDiaperChain: function (x, y) {
             let tilesToclearAround = [{x: x, y: y}]
             for (let i = 0; i < tilesToclearAround.length; i++) {
-                let testY, testX,loopX= tilesToclearAround[i].x, loopY= tilesToclearAround[i].y;
+                let testY, testX, loopX = tilesToclearAround[i].x, loopY = tilesToclearAround[i].y;
                 // center center
                 if (document.querySelector('[data-x="' + loopX + '"][data-y="' + loopY + '"] .diaper-cover')) {
                     document.querySelector('[data-x="' + loopX + '"][data-y="' + loopY + '"] .diaper-cover').remove();
@@ -161,11 +163,11 @@
             }
         },
         gameWon: function () {
-            alert("won");
+            view.wonDialog.open = true;
         },
         gameLost: function (x, y) {
             document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] .diaper-cover').remove();
-            alert("lost");
+            view.lostDialog.open = true;
         },
     };
     const setup = {
