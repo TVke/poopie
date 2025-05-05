@@ -58,17 +58,114 @@
     };
 
     const controller = {
-        addFlag: function () {
-
+        removeFlag: function (x, y) {
+            document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] .flag').remove();
         },
-        openDiaper: function () {
-
+        addFlag: function (x, y) {
+            const flagImage = view.flagImage.cloneNode();
+            flagImage.addEventListener('click', function () {
+                controller.removeFlag(x, y);
+            });
+            const selectedField = document.querySelector('[data-x="' + x + '"][data-y="' + y + '"]');
+            selectedField.appendChild(flagImage);
+        },
+        openDiaper: function (x, y) {
+            document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] .diaper-cover').remove();
+            controller.checkWin();
+        },
+        openDiaperChain: function (x, y) {
+            let tilesToclearAround = [{x: x, y: y}]
+            for (let i = 0; i < tilesToclearAround.length; i++) {
+                let testY, testX,loopX= tilesToclearAround[i].x, loopY= tilesToclearAround[i].y;
+                // center center
+                if (document.querySelector('[data-x="' + loopX + '"][data-y="' + loopY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + loopX + '"][data-y="' + loopY + '"] .diaper-cover').remove();
+                }
+                // top left
+                testY = loopY - 1;
+                testX = loopX - 1;
+                if (testY >= 0 && testX >= 0 && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // top center
+                testY = loopY - 1;
+                testX = loopX;
+                if (testY >= 0 && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // top right
+                testY = loopY - 1;
+                testX = loopX + 1;
+                if (testY >= 0 && testX < model.field[0].length && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // center left
+                testY = loopY;
+                testX = loopX - 1;
+                if (testX >= 0 && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // center right
+                testY = loopY;
+                testX = loopX + 1;
+                if (testX < model.field[0].length && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // bottom left
+                testY = loopY + 1;
+                testX = loopX - 1;
+                if (testY < model.field.length && testX >= 0 && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // bottom center
+                testY = loopY + 1;
+                testX = loopX;
+                if (testY < model.field.length && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+                // bottom right
+                testY = loopY + 1;
+                testX = loopX + 1;
+                if (testY < model.field.length && testX < model.field[0].length && document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover')) {
+                    document.querySelector('[data-x="' + testX + '"][data-y="' + testY + '"] .diaper-cover').remove();
+                    if (model.field[testY][testX].publish() === 0) {
+                        tilesToclearAround.push({x: testX, y: testY});
+                    }
+                }
+            }
+        },
+        checkWin: function () {
+            if (document.querySelectorAll('#field .diaper-cover').length === model.mines.length) {
+                controller.gameWon();
+            }
         },
         gameWon: function () {
-
+            alert("won");
         },
-        gameLost: function () {
-
+        gameLost: function (x, y) {
+            document.querySelector('[data-x="' + x + '"][data-y="' + y + '"] .diaper-cover').remove();
+            alert("lost");
         },
     };
     const setup = {
@@ -206,14 +303,29 @@
             }
         },
         listeners: function () {
-            // cover click
-            // uncover and check field
-
-            // check where to setup subscription of the field to check lost/won
-
-            //cover rightclick
-            // add a flag
-            // when clicking on a flag it removes the flag (not the cover)
+            [...document.querySelectorAll('#field .diaper-cover')].forEach(diaperCover => {
+                diaperCover.addEventListener('click', function () {
+                    const x = parseInt(diaperCover.parentElement.dataset.x);
+                    const y = parseInt(diaperCover.parentElement.dataset.y);
+                    switch (model.field[y][x].publish()) {
+                        case 'mine':
+                            controller.gameLost(x, y);
+                            break;
+                        case 0:
+                            controller.openDiaperChain(x, y);
+                            break;
+                        default:
+                            controller.openDiaper(x, y);
+                            break;
+                    }
+                });
+                diaperCover.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    const x = parseInt(diaperCover.parentElement.dataset.x);
+                    const y = parseInt(diaperCover.parentElement.dataset.y);
+                    controller.addFlag(x, y);
+                });
+            });
         },
         init: function () {
             // field setup
