@@ -334,7 +334,7 @@
                         const y = parseInt(diaperCover.parentElement.dataset.y);
                         controller.addFlag(x, y);
                     }, 500);
-                }, {passive: true});
+                });
                 diaperCover.addEventListener('touchend', function () {
                     if (longTouch) {
                         clearTimeout(longTouch);
@@ -343,7 +343,7 @@
                         const y = parseInt(diaperCover.parentElement.dataset.y);
                         controller.openDiaper(x, y);
                     }
-                }, {passive: true});
+                });
             });
         },
         init: function () {
