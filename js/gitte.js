@@ -346,10 +346,6 @@
                     e.preventDefault();
                     if (longTouch) {
                         clearTimeout(longTouch);
-                    }else {
-                        const x = parseInt(diaperCover.parentElement.dataset.x);
-                        const y = parseInt(diaperCover.parentElement.dataset.y);
-                        controller.openDiaper(x, y);
                     }
                 });
                 view.newGameBtn.addEventListener('click', function () {window.location.reload();});
