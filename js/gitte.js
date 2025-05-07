@@ -49,6 +49,9 @@
         levelSelectButtons: document.querySelectorAll('[data-level]'),
         wonDialog: document.getElementById('won'),
         lostDialog: document.getElementById('lost'),
+        newGameBtn: document.getElementsByClassName('new-game-btn')[0],
+        saveGameBtn: document.getElementsByClassName('save-game-btn')[0],
+        usernameInput: document.getElementById('name'),
     };
     const model = {
         selectedLevel: new Observable(),
@@ -163,6 +166,9 @@
             }
         },
         gameWon: function () {
+            view.saveGameBtn.addEventListener('click', function () {
+                console.log(view.usernameInput.value.trim());
+            })
             view.wonDialog.open = true;
         },
         gameLost: function (x, y) {
@@ -346,6 +352,7 @@
                         controller.openDiaper(x, y);
                     }
                 });
+                view.newGameBtn.addEventListener('click', function () {window.location.reload();});
             });
         },
         init: function () {
