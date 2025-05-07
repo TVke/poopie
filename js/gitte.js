@@ -306,6 +306,7 @@
         },
         listeners: function () {
             [...document.querySelectorAll('#field .diaper-cover')].forEach(diaperCover => {
+                let longTouch;
                 diaperCover.addEventListener('click', function () {
                     const x = parseInt(diaperCover.parentElement.dataset.x);
                     const y = parseInt(diaperCover.parentElement.dataset.y);
@@ -327,6 +328,22 @@
                     const y = parseInt(diaperCover.parentElement.dataset.y);
                     controller.addFlag(x, y);
                 });
+                diaperCover.addEventListener('touchstart', function () {
+                    longTouch = setTimeout(function (){
+                        const x = parseInt(diaperCover.parentElement.dataset.x);
+                        const y = parseInt(diaperCover.parentElement.dataset.y);
+                        controller.addFlag(x, y);
+                    }, 500);
+                }, {passive: true});
+                diaperCover.addEventListener('touchend', function () {
+                    if (longTouch) {
+                        clearTimeout(longTouch);
+                    }else {
+                        const x = parseInt(diaperCover.parentElement.dataset.x);
+                        const y = parseInt(diaperCover.parentElement.dataset.y);
+                        controller.openDiaper(x, y);
+                    }
+                }, {passive: true});
             });
         },
         init: function () {
