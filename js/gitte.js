@@ -328,14 +328,16 @@
                     const y = parseInt(diaperCover.parentElement.dataset.y);
                     controller.addFlag(x, y);
                 });
-                diaperCover.addEventListener('touchstart', function () {
+                diaperCover.addEventListener('touchstart', function (e) {
+                    e.preventDefault();
                     longTouch = setTimeout(function (){
                         const x = parseInt(diaperCover.parentElement.dataset.x);
                         const y = parseInt(diaperCover.parentElement.dataset.y);
                         controller.addFlag(x, y);
                     }, 500);
                 });
-                diaperCover.addEventListener('touchend', function () {
+                diaperCover.addEventListener('touchend', function (e) {
+                    e.preventDefault();
                     if (longTouch) {
                         clearTimeout(longTouch);
                     }else {
