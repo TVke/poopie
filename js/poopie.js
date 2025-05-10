@@ -49,7 +49,7 @@
         levelSelectButtons: document.querySelectorAll('[data-level]'),
         wonDialog: document.getElementById('won'),
         lostDialog: document.getElementById('lost'),
-        newGameBtn: document.getElementsByClassName('new-game-btn')[0],
+        newGameBtns: document.getElementsByClassName('new-game-btn'),
         saveGameBtn: document.getElementsByClassName('save-game-btn')[0],
         usernameInput: document.getElementById('name'),
     };
@@ -336,19 +336,31 @@
                 });
                 diaperCover.addEventListener('touchstart', function (e) {
                     e.preventDefault();
-                    longTouch = setTimeout(function (){
-                        const x = parseInt(diaperCover.parentElement.dataset.x);
-                        const y = parseInt(diaperCover.parentElement.dataset.y);
-                        controller.addFlag(x, y);
-                    }, 500);
+                    longTouch = Date.now();
                 });
                 diaperCover.addEventListener('touchend', function (e) {
                     e.preventDefault();
-                    if (longTouch) {
-                        clearTimeout(longTouch);
+                        const x = parseInt(diaperCover.parentElement.dataset.x);
+                        const y = parseInt(diaperCover.parentElement.dataset.y);
+                    if (Date.now() - longTouch > 500) {
+                        controller.addFlag(x, y);
+                    } else{
+                        switch (model.field[y][x].publish()) {
+                            case 'mine':
+                                controller.gameLost(x, y);
+                                break;
+                            case 0:
+                                controller.openDiaperChain(x, y);
+                                break;
+                            default:
+                                controller.openDiaper(x, y);
+                                break;
+                        }
                     }
                 });
-                view.newGameBtn.addEventListener('click', function () {window.location.reload();});
+                [...view.newGameBtns].forEach(function (newGameBtn) {
+                    newGameBtn.addEventListener('click', function () {window.location.reload();});
+                })
             });
         },
         init: function () {
@@ -367,7 +379,8 @@
 
             // level selection
             [...view.levelSelectButtons].forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
                     model.selectedLevel.publish(button.dataset.level);
                 });
             })
